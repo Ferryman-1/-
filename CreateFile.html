@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>文件生成器</title>
+    <style>
+        .header {
+            background-color: #f1f1f1;
+            padding: 50px;
+            margin: 0 auto;
+            width: 800px;
+        }
+
+        .box1 {
+            background-color: #f1f1f1;
+            width: 250px;
+            margin: 20px 0;
+            outline: none;
+            border: 0;
+            padding: 10px;
+            border-bottom: 2px solid rgb(175, 175, 175);
+            font-size: 20px;
+        }
+
+        .btn1 {
+            background-color: #3173a2;
+            width: 400px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            user-select: none;
+            letter-spacing: 1rem;
+            text-indent: 1rem;
+            border-radius: 30px;
+            box-sizing: border-box;
+            color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        let dirHandle = null;//用来存储对象
+
+        //选择目录路径
+        //async和await缺一不可
+        async function getDir() {
+            //获得一个目录句柄（对象）
+            dirHandle = await window.showDirectoryPicker();
+            //console.log(dirHandle);控制台打印目录名字
+        }
+
+        //getDirectoryHandle（参数1,参数2）：不存在该文件名就创建
+        //创建多个文件夹
+        async function myFunction() {
+            if (dirHandle == null) {
+                alert("请先获取路径");
+                return;//终止函数
+            }
+            let iFileName = null;//用来存储对象
+            let fileName = document.getElementById("fileName").value;//获取用户输入文件夹的名字
+            let fileNum = document.getElementById("fileNum").value;// 获取用户输入文件夹的的数量
+
+            //9个非法字符数组定义
+            let vailChar = ["/", "\\", "|", ":", "?", "\"\"", "*", "<", ">"];
+            //循环遍历是否存在
+            for (let j = 0; j < 9; j++) {
+                //>=0就是找到非法字符,就直接终止运行
+                if (fileName.indexOf(vailChar[j]) >= 0) {   //查找字符串中的字符串查找字符串中的字符串
+                    alert("你输入的文件名存在非法字符，无法创建，请修改");
+                    return;
+                }
+            }
+            let i = 1;
+            console.log("用户输入的值为;" + fileNum);
+            //文件数量异常处理 创建多个文件夹
+            if (fileNum <= 0) {
+                alert("文件数量不能小于1");
+                return;
+            }
+            else if (fileNum < 10) {   //1 2一位数
+                //fileName名字不变，iFileName名字随着i的增大而变化
+                for (; i <= fileNum; i++) {
+                    console.log("一位数" + fileNum);
+                    iFileName = fileName + i;
+                    //文件名长度异常处理 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                    if (iFileName.length >= 240) {
+                        let j = i - 1;
+                        alert("文件夹名字长度不超过240个字符,已经创建至" + j + "个文件夹");
+                        break;//终止当前循环
+                    }
+                    //创建单个文件夹
+                    await dirHandle.getDirectoryHandle(iFileName, { create: true, });
+                }
+                i = i - 1;
+                if (i == fileNum) {
+                    alert("恭喜你成功创建文件至" + i + "个");
+                } else {
+                    alert("你仅创建" + i + "个文件，重新试试吧！");
+                }
+            } else if (fileNum < 100) { //10 ...90 ...99两位数
+                for (; i <= fileNum; i++) {
+                    if (i < 10) {
+                        iFileName = (fileName + 0) + i;
+                        console.log(i + "进入<10");
+                    }
+                    if (i >= 10) {
+                        iFileName = fileName + i;
+                        console.log(i + "进入>=10");
+                    }
+                    //文件名长度异常处理
+                    if (iFileName.length >= 240) {
+                        let j = i - 1;
+                        alert("文件夹名字长度不超过240个字符,已经创建至" + j + "个文件夹");
+                        break;//终止当前循环
+                    }
+                    //创建单个文件夹
+                    await dirHandle.getDirectoryHandle(iFileName, { create: true, });
+                }
+                i = i - 1;
+                if (i == fileNum) {
+                    alert("恭喜你成功创建文件至" + i + "个");
+                } else {
+                    alert("你仅创建" + i + "个文件，重新试试吧！");
+                }
+            }
+            else if (fileNum < 1000) { //999 ...800三位数
+                for (; i <= fileNum; i++) {
+                    if (i < 10) {
+                        iFileName = (fileName + 0 + 0) + i;
+                        console.log(i + "进入<10");
+                    }
+                    if (i < 100 && i >= 10) {
+                        iFileName = (fileName + 0) + i;
+                        console.log(i + "进入>=10");
+                    }
+                    if (i < 1000 && i >= 100) {
+                        iFileName = fileName + i;
+                        console.log(i + "进入>=100");
+                    }
+                    //文件名长度异常处理
+                    if (iFileName.length >= 240) {
+                        let j = i - 1;
+                        alert("文件夹名字长度不超过240个字符,已经创建至" + j + "个文件夹");
+                        break;//终止当前循环
+                    }
+                    //创建单个文件夹
+                    await dirHandle.getDirectoryHandle(iFileName, { create: true, });
+                }
+                i = i - 1;
+                if (i == fileNum) {
+                    alert("恭喜你成功创建文件至" + i + "个");
+                } else {
+                    alert("你仅创建" + i + "个文件，重新试试吧！");
+                }
+            }
+            else if (fileNum >= 1000) {
+                alert("文件数量太多了，文件数量保持在1000以内");
+                return;
+            }
+
+
+        }
+    </script>
+    <div class="header">
+        <button class="btn1" onclick="getDir()">选择路径</button><br>
+        <h2>请输入文件夹名字： <input class="box1" placeholder="输入文件夹名字" id="fileName"></h2>
+
+        <h2>请输入文件夹数量：<input class="box1" type="number" placeholder="输入文件夹数量" id="fileNum"></h2>
+
+        <button class="btn1" onclick="myFunction()">点击批量生成文件夹</button>
+
+    </div>
+
+
+</body>
+
+</html>
